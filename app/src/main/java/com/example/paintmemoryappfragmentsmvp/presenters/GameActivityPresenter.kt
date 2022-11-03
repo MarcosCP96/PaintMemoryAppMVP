@@ -1,42 +1,43 @@
 package com.example.paintmemoryappfragmentsmvp.presenters
 
 import android.content.Intent
-import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import com.example.paintmemoryapp.models.Card
+import com.example.paintmemoryapp.models.DeckOfPairs
 import com.example.paintmemoryappfragmentsmvp.views.GameActivity
 import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
 import com.example.paintmemoryappfragmentsmvp.views.MainActivity
-import org.w3c.dom.Text
+import com.example.paintmemoryappfragmentsmvp.views.PointsCountActivity
 
 class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.GameActivityPresenter {
     val presenterGameActivity = gameActivity
 
-    override fun flipCard(card: Card) {
-        card.imageView.setImageDrawable(getDrawable(presenterGameActivity, card.drawable))
+    override fun flipCard(card: Card, listOfPlayedCards: MutableList<Card>, listOfCards: List<Card>) {
+        listOfPlayedCards.add(card)
+        presenterGameActivity.flipCard(card, listOfPlayedCards)
+        if (presenterGameActivity.isListFull(listOfPlayedCards)) areCardsTagDifferent(listOfCards, listOfPlayedCards)
     }
 
     override fun backToMenu() {
-        presenterGameActivity.startActivity(Intent(presenterGameActivity, MainActivity::class.java))
+        presenterGameActivity.goToActivity(backToMenuIntent())
     }
 
     override fun isListFull(listOfPlayedCards: MutableList<Card>):Boolean {
         return listOfPlayedCards.size == 2
     }
 
-    override fun areCardsIdDifferent(
+    override fun areCardsTagDifferent(
         listOfCards: List<Card>,
         listOfPlayedCards: MutableList<Card>
     ) {
-        increaseTurns()
-        if (listOfPlayedCards[0].imageView.id == listOfPlayedCards[1].imageView.id){
+        updateTurns()
+        if (listOfPlayedCards[0].tag == listOfPlayedCards[1].tag){
             showAlertCardRepeated()
             listOfPlayedCards.forEach {
                     card -> flipCardToBack(card)
             }
             listOfPlayedCards.clear()
         } else {
-            areCardsTagEqual(listOfCards, listOfPlayedCards)
+            areCardsDrawableEqual(listOfCards, listOfPlayedCards)
         }
     }
 
@@ -44,16 +45,14 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
         presenterGameActivity.showAlertCardRepeated()
     }
 
-    override fun areCardsTagEqual(
+    override fun areCardsDrawableEqual(
         listOfCards: List<Card>,
         listOfPlayedCards: MutableList<Card>
     ) {
-        if (listOfPlayedCards[0].tag == listOfPlayedCards[1].tag){
-            showToastIfEqualTag()
+        if (listOfPlayedCards[0].drawable == listOfPlayedCards[1].drawable){
             disableEqualCards(listOfPlayedCards[0], listOfPlayedCards[1])
             listOfPlayedCards.clear()
         } else {
-            showToastIfDifferentTag()
             listOfPlayedCards.forEach {
                     card -> flipCardToBack(card)
             }
@@ -62,38 +61,47 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
         isGameFinished(listOfCards)
     }
 
-    override fun showToastIfEqualTag() {
-        presenterGameActivity.showToastIfEqualTag()
-    }
-
-    override fun showToastIfDifferentTag() {
-        presenterGameActivity.showToastIfDifferentTag()
-    }
-
     override fun flipCardToBack(card: Card) {
         presenterGameActivity.flipCardToBack(card)
     }
 
     override fun disableEqualCards(firstCard: Card, secondCard: Card) {
-        firstCard.imageView.isEnabled = false
-        secondCard.imageView.isEnabled = false
+        firstCard.imageView?.isEnabled = false
+        secondCard.imageView?.isEnabled = false
     }
 
     override fun isGameFinished(listOfCards: List<Card>) {
         var disabledCards = 0
         listOfCards.forEach { card ->
-            if (!card.imageView.isEnabled) {
+            if (!card.imageView?.isEnabled!!) {
                 disabledCards++
                 if (disabledCards == listOfCards.size) goToPointCount()
             }
         }
     }
 
-    override fun increaseTurns() {
-        presenterGameActivity.increaseTurns()
+    override fun goToPointCount() {
+        presenterGameActivity.goToActivity(pointCountIntent())
     }
 
-    override fun goToPointCount() {
-        presenterGameActivity.goToPointCount()
+    override fun shuffleCards(
+        listOfCards: List<Card>,
+        deckOfPairs: DeckOfPairs,
+        listOfPlayedCards: MutableList<Card>
+    ) {
+        var counter = 0
+        listOfCards.forEach { card ->
+            card.drawable = deckOfPairs.listOfDrawablesTagPairsShuffledHardMode[counter].first
+            card.tag = deckOfPairs.listOfDrawablesTagPairsShuffledHardMode[counter].second
+            counter++
+        }
     }
+
+    override fun updateTurns() {
+        presenterGameActivity.updateTurns()
+    }
+
+    override fun backToMenuIntent(): Intent = Intent(presenterGameActivity, MainActivity::class.java)
+
+    override fun pointCountIntent(): Intent = Intent(presenterGameActivity, PointsCountActivity::class.java)
 }

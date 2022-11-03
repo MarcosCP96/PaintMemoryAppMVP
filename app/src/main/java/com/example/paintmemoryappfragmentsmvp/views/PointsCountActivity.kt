@@ -1,6 +1,7 @@
 package com.example.paintmemoryappfragmentsmvp.views
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -28,10 +29,14 @@ class PointsCountActivity : AppCompatActivity(), MemoryGameInterface.PointCountV
     }
 
     override fun backToMenu() {
-        pointCountPresenter.backToMenu()
+        startActivity(pointCountPresenter.backToMenuIntent())
     }
 
     override fun playAgain() {
-        pointCountPresenter.playAgain()
+        startActivity(pointCountPresenter.playAgainIntent())
+    }
+
+    override fun goToActivity(intent: Intent) {
+        startActivity(intent)
     }
 }
