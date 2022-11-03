@@ -1,10 +1,9 @@
-package com.example.paintmemoryapp.models
+package com.example.paintmemoryappfragmentsmvp.models
 
 import com.example.paintmemoryappfragmentsmvp.R
 
-
 class DeckOfPairs {
-    var listOfDrawablesTagPairs = mutableListOf(Pair(R.drawable.eraser_front_card,"eraser1"),
+    private var listOfDrawablesTagPairs = mutableListOf(Pair(R.drawable.eraser_front_card,"eraser1"),
         Pair(R.drawable.eraser_front_card,"eraser2"),
         Pair(R.drawable.pencil_front_card,"pencil1"),
         Pair(R.drawable.pencil_front_card,"pencil2"),

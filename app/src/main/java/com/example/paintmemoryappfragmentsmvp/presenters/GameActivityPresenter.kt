@@ -1,21 +1,21 @@
 package com.example.paintmemoryappfragmentsmvp.presenters
 
 import android.content.Intent
-import com.example.paintmemoryapp.models.Card
-import com.example.paintmemoryapp.models.DeckOfPairs
+import com.example.paintmemoryappfragmentsmvp.models.Card
+import com.example.paintmemoryappfragmentsmvp.models.DeckOfPairs
 import com.example.paintmemoryappfragmentsmvp.views.GameActivity
 import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
 import com.example.paintmemoryappfragmentsmvp.views.MainActivity
 import com.example.paintmemoryappfragmentsmvp.views.PointsCountActivity
 
 class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.GameActivityPresenter {
-    val presenterGameActivity = gameActivity
+    private val presenterGameActivity = gameActivity
 
     override fun flipCard(card: Card,
                           listOfPlayedCards: MutableList<Card>,
                           listOfCards: List<Card>) {
         listOfPlayedCards.add(card)
-        presenterGameActivity.flipCard(card, listOfPlayedCards)
+        presenterGameActivity.flipCard(card)
         if (presenterGameActivity.isListFull(listOfPlayedCards)){
             areCardsTagDifferent(listOfCards, listOfPlayedCards)
         }

@@ -9,7 +9,7 @@ import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
 import com.example.paintmemoryappfragmentsmvp.presenters.MainActivityPresenter
 
 class MainActivity : AppCompatActivity(),MemoryGameInterface.MainActivityView {
-    val mainActivityPresenter = MainActivityPresenter(this)
+    private val mainActivityPresenter = MainActivityPresenter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

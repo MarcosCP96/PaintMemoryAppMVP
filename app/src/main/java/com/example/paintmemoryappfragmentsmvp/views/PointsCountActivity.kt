@@ -11,8 +11,9 @@ import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
 import com.example.paintmemoryappfragmentsmvp.presenters.PointCountPresenter
 
 class PointsCountActivity : AppCompatActivity(), MemoryGameInterface.PointCountView {
-    val pointCountPresenter = PointCountPresenter(this)
+    private val pointCountPresenter = PointCountPresenter(this)
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_points_count)

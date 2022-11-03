@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.example.paintmemoryapp.models.Card
 import com.example.paintmemoryappfragmentsmvp.R
 
 class CardAdapter(private var listOfCards: List<Card>,
@@ -20,7 +19,7 @@ class CardAdapter(private var listOfCards: List<Card>,
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
         val item = listOfCards[position]
-        holder.firstCard.setImageResource(item.card_back)
+        holder.firstCard.setImageResource(item.cardBack)
         item.imageView = holder.firstCard
         holder.firstCard.setOnClickListener {
             onClick.invoke(item)

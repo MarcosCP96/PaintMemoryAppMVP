@@ -1,8 +1,8 @@
 package com.example.paintmemoryappfragmentsmvp.interfaces
 
 import android.content.Intent
-import com.example.paintmemoryapp.models.Card
-import com.example.paintmemoryapp.models.DeckOfPairs
+import com.example.paintmemoryappfragmentsmvp.models.Card
+import com.example.paintmemoryappfragmentsmvp.models.DeckOfPairs
 
 interface MemoryGameInterface {
 
@@ -18,8 +18,7 @@ interface MemoryGameInterface {
     }
 
     interface GameActivityView{
-        fun flipCard(card: Card,
-                     listOfPlayedCards: MutableList<Card>)
+        fun flipCard(card: Card)
         fun isListFull(listOfPlayedCards: MutableList<Card>): Boolean
         fun showAlertCardRepeated()
         fun flipCardToBack(card: Card)
@@ -43,7 +42,8 @@ interface MemoryGameInterface {
                                   listOfPlayedCards: MutableList<Card>)
         fun flipCardToBack(card: Card)
         fun disableEqualCards(firstCard: Card,
-                              secondCard: Card)
+                              secondCard: Card
+        )
         fun isGameFinished(listOfCards: List<Card>)
         fun goToPointCount()
         fun shuffleCards(listOfCards: List<Card>,
