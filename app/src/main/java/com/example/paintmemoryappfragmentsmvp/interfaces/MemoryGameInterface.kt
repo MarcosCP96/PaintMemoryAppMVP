@@ -18,27 +18,37 @@ interface MemoryGameInterface {
     }
 
     interface GameActivityView{
-        fun flipCard(card: Card, listOfPlayedCards: MutableList<Card>)
+        fun flipCard(card: Card,
+                     listOfPlayedCards: MutableList<Card>)
         fun isListFull(listOfPlayedCards: MutableList<Card>): Boolean
         fun showAlertCardRepeated()
         fun flipCardToBack(card: Card)
-        fun shuffleCards(listOfCards: List<Card>, deckOfPairs: DeckOfPairs, listOfPlayedCards: MutableList<Card>)
+        fun shuffleCards(listOfCards: List<Card>,
+                         deckOfPairs: DeckOfPairs,
+                         listOfPlayedCards: MutableList<Card>)
         fun updateTurns()
         fun goToActivity(intent: Intent)
     }
 
     interface GameActivityPresenter{
-        fun flipCard(card: Card, listOfPlayedCards: MutableList<Card>, listOfCards: List<Card>)
+        fun flipCard(card: Card,
+                     listOfPlayedCards: MutableList<Card>,
+                     listOfCards: List<Card>)
         fun backToMenu()
         fun isListFull(listOfPlayedCards: MutableList<Card>): Boolean
-        fun areCardsTagDifferent(listOfCards: List<Card>, listOfPlayedCards: MutableList<Card>)
+        fun areCardsTagDifferent(listOfCards: List<Card>,
+                                 listOfPlayedCards: MutableList<Card>)
         fun showAlertCardRepeated()
-        fun areCardsDrawableEqual(listOfCards: List<Card>, listOfPlayedCards: MutableList<Card>)
+        fun areCardsDrawableEqual(listOfCards: List<Card>,
+                                  listOfPlayedCards: MutableList<Card>)
         fun flipCardToBack(card: Card)
-        fun disableEqualCards(firstCard: Card, secondCard: Card)
+        fun disableEqualCards(firstCard: Card,
+                              secondCard: Card)
         fun isGameFinished(listOfCards: List<Card>)
         fun goToPointCount()
-        fun shuffleCards(listOfCards: List<Card>, deckOfPairs: DeckOfPairs, listOfPlayedCards: MutableList<Card>)
+        fun shuffleCards(listOfCards: List<Card>,
+                         deckOfPairs: DeckOfPairs,
+                         listOfPlayedCards: MutableList<Card>)
         fun updateTurns()
         fun backToMenuIntent(): Intent
         fun pointCountIntent(): Intent
@@ -51,6 +61,5 @@ interface MemoryGameInterface {
 
     interface MainActivityPresenter{
         fun startGame()
-        fun showHelp()
     }
 }

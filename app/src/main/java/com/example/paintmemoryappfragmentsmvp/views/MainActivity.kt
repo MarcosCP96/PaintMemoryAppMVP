@@ -1,5 +1,6 @@
 package com.example.paintmemoryappfragmentsmvp.views
 
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -25,6 +26,9 @@ class MainActivity : AppCompatActivity(),MemoryGameInterface.MainActivityView {
     }
 
     override fun showHelp() {
-        mainActivityPresenter.showHelp()
+        AlertDialog.Builder(this).setMessage(
+            "Selecciona una dificultad de la lista\n" +
+                    "Ejecuta Paint.exe\n" +
+                    "Encuentra las parejas para ganar").show()
     }
 }

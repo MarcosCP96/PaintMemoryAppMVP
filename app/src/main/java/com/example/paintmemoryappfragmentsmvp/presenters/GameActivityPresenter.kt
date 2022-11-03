@@ -11,10 +11,14 @@ import com.example.paintmemoryappfragmentsmvp.views.PointsCountActivity
 class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.GameActivityPresenter {
     val presenterGameActivity = gameActivity
 
-    override fun flipCard(card: Card, listOfPlayedCards: MutableList<Card>, listOfCards: List<Card>) {
+    override fun flipCard(card: Card,
+                          listOfPlayedCards: MutableList<Card>,
+                          listOfCards: List<Card>) {
         listOfPlayedCards.add(card)
         presenterGameActivity.flipCard(card, listOfPlayedCards)
-        if (presenterGameActivity.isListFull(listOfPlayedCards)) areCardsTagDifferent(listOfCards, listOfPlayedCards)
+        if (presenterGameActivity.isListFull(listOfPlayedCards)){
+            areCardsTagDifferent(listOfCards, listOfPlayedCards)
+        }
     }
 
     override fun backToMenu() {
@@ -91,8 +95,8 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
     ) {
         var counter = 0
         listOfCards.forEach { card ->
-            card.drawable = deckOfPairs.listOfDrawablesTagPairsShuffledHardMode[counter].first
-            card.tag = deckOfPairs.listOfDrawablesTagPairsShuffledHardMode[counter].second
+            card.drawable = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].first
+            card.tag = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].second
             counter++
         }
     }
