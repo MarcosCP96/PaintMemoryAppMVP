@@ -1,23 +1,26 @@
 package com.example.paintmemoryappfragmentsmvp.presenters
 
 import android.content.Intent
-import com.example.paintmemoryappfragmentsmvp.models.Card
-import com.example.paintmemoryappfragmentsmvp.models.DeckOfPairs
+import com.example.paintmemoryappfragmentsmvp.models.CardNew
 import com.example.paintmemoryappfragmentsmvp.views.GameActivity
 import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
+import com.example.paintmemoryappfragmentsmvp.useCase.ShuffleCardsUseCase
 import com.example.paintmemoryappfragmentsmvp.views.MainActivity
 import com.example.paintmemoryappfragmentsmvp.views.PointsCountActivity
 
 class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.GameActivityPresenter {
     private val presenterGameActivity = gameActivity
+    private val shuffleCardUseCase = ShuffleCardsUseCase()
 
-    override fun flipCard(card: Card,
-                          listOfPlayedCards: MutableList<Card>,
-                          listOfCards: List<Card>) {
+    override fun getShuffledCards(): List<CardNew> = shuffleCardUseCase.generate(1)
+
+    override fun flipCard(card: CardNew,
+                          listOfPlayedCards: MutableList<CardNew>,
+                          listOfCards: List<CardNew>) {
         listOfPlayedCards.add(card)
         presenterGameActivity.flipCard(card)
         if (presenterGameActivity.isListFull(listOfPlayedCards)){
-            areCardsTagDifferent(listOfCards, listOfPlayedCards)
+            areCardsIdDifferent(listOfCards, listOfPlayedCards)
         }
     }
 
@@ -25,16 +28,16 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
         presenterGameActivity.goToActivity(backToMenuIntent())
     }
 
-    override fun isListFull(listOfPlayedCards: MutableList<Card>):Boolean {
+    override fun isListFull(listOfPlayedCards: MutableList<CardNew>):Boolean {
         return listOfPlayedCards.size == 2
     }
 
-    override fun areCardsTagDifferent(
-        listOfCards: List<Card>,
-        listOfPlayedCards: MutableList<Card>
+    override fun areCardsIdDifferent(
+        listOfCards: List<CardNew>,
+        listOfPlayedCards: MutableList<CardNew>
     ) {
         updateTurns()
-        if (listOfPlayedCards[0].tag == listOfPlayedCards[1].tag){
+        if (listOfPlayedCards[0].id == listOfPlayedCards[1].id){
             showAlertCardRepeated()
             listOfPlayedCards.forEach {
                     card -> flipCardToBack(card)
@@ -50,10 +53,10 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
     }
 
     override fun areCardsDrawableEqual(
-        listOfCards: List<Card>,
-        listOfPlayedCards: MutableList<Card>
+        listOfCards: List<CardNew>,
+        listOfPlayedCards: MutableList<CardNew>
     ) {
-        if (listOfPlayedCards[0].drawable == listOfPlayedCards[1].drawable){
+        if (listOfPlayedCards[0].image == listOfPlayedCards[1].image){
             disableEqualCards(listOfPlayedCards[0], listOfPlayedCards[1])
             listOfPlayedCards.clear()
         } else {
@@ -65,16 +68,16 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
         isGameFinished(listOfCards)
     }
 
-    override fun flipCardToBack(card: Card) {
+    override fun flipCardToBack(card: CardNew) {
         presenterGameActivity.flipCardToBack(card)
     }
 
-    override fun disableEqualCards(firstCard: Card, secondCard: Card) {
+    override fun disableEqualCards(firstCard: CardNew, secondCard: CardNew) {
         firstCard.imageView?.isEnabled = false
         secondCard.imageView?.isEnabled = false
     }
 
-    override fun isGameFinished(listOfCards: List<Card>) {
+    override fun isGameFinished(listOfCards: List<CardNew>) {
         var disabledCards = 0
         listOfCards.forEach { card ->
             if (!card.imageView?.isEnabled!!) {
@@ -88,18 +91,18 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
         presenterGameActivity.goToActivity(pointCountIntent())
     }
 
-    override fun shuffleCards(
-        listOfCards: List<Card>,
-        deckOfPairs: DeckOfPairs,
-        listOfPlayedCards: MutableList<Card>
-    ) {
-        var counter = 0
-        listOfCards.forEach { card ->
-            card.drawable = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].first
-            card.tag = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].second
-            counter++
-        }
-    }
+//    override fun shuffleCards(
+//        listOfCards: List<CardNew>,
+//        deckOfPairs: DeckOfPairs,
+//        listOfPlayedCards: MutableList<CardNew>
+//    ) {
+//        var counter = 0
+//        listOfCards.forEach { card ->
+//            card.image = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].first
+//            card.tag = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].second
+//            counter++
+//        }
+//    }
 
     override fun updateTurns() {
         presenterGameActivity.updateTurns()
