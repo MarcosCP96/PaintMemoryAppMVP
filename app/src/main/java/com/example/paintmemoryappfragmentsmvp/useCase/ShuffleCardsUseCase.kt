@@ -16,6 +16,6 @@ class ShuffleCardsUseCase {
             mutableListRandom.add(card)
         }
         return mutableListRandom.shuffled()
-            .mapIndexed { index: Int, i: Int -> CardNew(i, false, index) }
+            .mapIndexed { index: Int, i: Int -> CardNew(index, i) }
     }
 }

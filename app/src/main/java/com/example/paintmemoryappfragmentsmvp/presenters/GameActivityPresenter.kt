@@ -1,27 +1,62 @@
 package com.example.paintmemoryappfragmentsmvp.presenters
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import com.example.paintmemoryappfragmentsmvp.models.CardNew
 import com.example.paintmemoryappfragmentsmvp.views.GameActivity
 import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
+import com.example.paintmemoryappfragmentsmvp.useCase.GameFinishedUseCase
+import com.example.paintmemoryappfragmentsmvp.useCase.IdTagEqualUseCase
 import com.example.paintmemoryappfragmentsmvp.useCase.ShuffleCardsUseCase
+import com.example.paintmemoryappfragmentsmvp.useCase.TurnCounterUseCase
 import com.example.paintmemoryappfragmentsmvp.views.MainActivity
 import com.example.paintmemoryappfragmentsmvp.views.PointsCountActivity
 
 class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.GameActivityPresenter {
     private val presenterGameActivity = gameActivity
     private val shuffleCardUseCase = ShuffleCardsUseCase()
+    private var idTagEqualUseCase = IdTagEqualUseCase()
+    private var isGameFinishedUseCase = GameFinishedUseCase()
+    private var cards: List<CardNew> = listOf()
+    private var playedPairOfCards: MutableList<CardNew> = mutableListOf()
 
-    override fun getShuffledCards(): List<CardNew> = shuffleCardUseCase.generate(1)
+    override fun initGame() {
+        cards = shuffleCardUseCase.generate(1)
+    }
 
-    override fun flipCard(card: CardNew,
-                          listOfPlayedCards: MutableList<CardNew>,
-                          listOfCards: List<CardNew>) {
-        listOfPlayedCards.add(card)
-        presenterGameActivity.flipCard(card)
-        if (presenterGameActivity.isListFull(listOfPlayedCards)){
-            areCardsIdDifferent(listOfCards, listOfPlayedCards)
+    override fun getShuffledCards(): List<CardNew> = cards
+
+    override fun flipCard(card: CardNew) {
+        playedPairOfCards.add(card)
+        
+        if (playedPairOfCards.size == 2) presenterGameActivity.updateTurns()
+
+        var cardToTurn = cards.indexOf(card)
+
+        cards[cardToTurn].isTurned = true
+
+        presenterGameActivity.updateCardAdapter(cards)
+
+        try {
+            val compared = idTagEqualUseCase.execute(playedPairOfCards)
+            if (compared){
+                cards.forEach { card ->
+                    if (playedPairOfCards.any { card.id == it.id })
+                        card.isEnabled = false
+                }
+            } else {
+                cards.forEach { card ->
+                    if (playedPairOfCards.any { card.id == it.id })
+                        card.isTurned = false
+                }
+            }
+            playedPairOfCards.clear()
+            presenterGameActivity.updateCardAdapter(cards)
+        } catch (e:Exception){
+            e.printStackTrace()
         }
+        if (isGameFinishedUseCase.isGameFinished(cards)) goToPointCount()
     }
 
     override fun backToMenu() {
@@ -69,40 +104,27 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
     }
 
     override fun flipCardToBack(card: CardNew) {
-        presenterGameActivity.flipCardToBack(card)
+//        presenterGameActivity.flipCardToBack(card)
     }
 
     override fun disableEqualCards(firstCard: CardNew, secondCard: CardNew) {
-        firstCard.imageView?.isEnabled = false
-        secondCard.imageView?.isEnabled = false
+//        firstCard.imageView?.isEnabled = false
+//        secondCard.imageView?.isEnabled = false
     }
 
     override fun isGameFinished(listOfCards: List<CardNew>) {
-        var disabledCards = 0
-        listOfCards.forEach { card ->
-            if (!card.imageView?.isEnabled!!) {
-                disabledCards++
-                if (disabledCards == listOfCards.size) goToPointCount()
-            }
-        }
+//        var disabledCards = 0
+//        listOfCards.forEach { card ->
+//            if (!card.imageView?.isEnabled!!) {
+//                disabledCards++
+//                if (disabledCards == listOfCards.size) goToPointCount()
+//            }
+//        }
     }
 
     override fun goToPointCount() {
         presenterGameActivity.goToActivity(pointCountIntent())
     }
-
-//    override fun shuffleCards(
-//        listOfCards: List<CardNew>,
-//        deckOfPairs: DeckOfPairs,
-//        listOfPlayedCards: MutableList<CardNew>
-//    ) {
-//        var counter = 0
-//        listOfCards.forEach { card ->
-//            card.image = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].first
-//            card.tag = deckOfPairs.listOfDrawablesTagPairsShuffled[counter].second
-//            counter++
-//        }
-//    }
 
     override fun updateTurns() {
         presenterGameActivity.updateTurns()
@@ -111,4 +133,5 @@ class GameActivityPresenter(gameActivity: GameActivity): MemoryGameInterface.Gam
     override fun backToMenuIntent(): Intent = Intent(presenterGameActivity, MainActivity::class.java)
 
     override fun pointCountIntent(): Intent = Intent(presenterGameActivity, PointsCountActivity::class.java)
+        .putExtra("turns", presenterGameActivity.getTurns())
 }

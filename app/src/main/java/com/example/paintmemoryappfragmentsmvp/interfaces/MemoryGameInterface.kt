@@ -1,9 +1,7 @@
 package com.example.paintmemoryappfragmentsmvp.interfaces
 
 import android.content.Intent
-import com.example.paintmemoryappfragmentsmvp.models.Card
 import com.example.paintmemoryappfragmentsmvp.models.CardNew
-import com.example.paintmemoryappfragmentsmvp.models.DeckOfPairs
 
 interface MemoryGameInterface {
 
@@ -19,22 +17,18 @@ interface MemoryGameInterface {
     }
 
     interface GameActivityView{
-        fun flipCard(card: CardNew)
         fun isListFull(listOfPlayedCards: MutableList<CardNew>): Boolean
         fun showAlertCardRepeated()
-        fun flipCardToBack(card: CardNew)
-//        fun shuffleCards(listOfCards: List<CardNew>,
-//                         deckOfPairs: DeckOfPairs,
-//                         listOfPlayedCards: MutableList<CardNew>)
         fun updateTurns()
+        fun getTurns(): Int
         fun goToActivity(intent: Intent)
+        fun updateCardAdapter(listOfCards: List<CardNew>)
     }
 
     interface GameActivityPresenter{
+        fun initGame()
         fun getShuffledCards(): List<CardNew>
-        fun flipCard(card: CardNew,
-                     listOfPlayedCards: MutableList<CardNew>,
-                     listOfCards: List<CardNew>)
+        fun flipCard(card: CardNew)
         fun backToMenu()
         fun isListFull(listOfPlayedCards: MutableList<CardNew>): Boolean
         fun areCardsIdDifferent(listOfCards: List<CardNew>,
@@ -47,9 +41,6 @@ interface MemoryGameInterface {
                               secondCard: CardNew)
         fun isGameFinished(listOfCards: List<CardNew>)
         fun goToPointCount()
-//        fun shuffleCards(listOfCards: List<CardNew>,
-//                         deckOfPairs: DeckOfPairs,
-//                         listOfPlayedCards: MutableList<CardNew>)
         fun updateTurns()
         fun backToMenuIntent(): Intent
         fun pointCountIntent(): Intent
