@@ -17,11 +17,12 @@ interface MemoryGameInterface {
     }
 
     interface GameActivityView{
-        fun isListFull(listOfPlayedCards: MutableList<CardNew>): Boolean
         fun showAlertCardRepeated()
         fun updateTurns()
         fun getTurns(): Int
         fun goToActivity(intent: Intent)
+        fun backToMenu()
+        fun goToPointCount()
         fun updateCardAdapter(listOfCards: List<CardNew>)
     }
 
@@ -29,21 +30,8 @@ interface MemoryGameInterface {
         fun initGame()
         fun getShuffledCards(): List<CardNew>
         fun flipCard(card: CardNew)
-        fun backToMenu()
-        fun isListFull(listOfPlayedCards: MutableList<CardNew>): Boolean
-        fun areCardsIdDifferent(listOfCards: List<CardNew>,
-                                 listOfPlayedCards: MutableList<CardNew>)
         fun showAlertCardRepeated()
-        fun areCardsDrawableEqual(listOfCards: List<CardNew>,
-                                  listOfPlayedCards: MutableList<CardNew>)
-        fun flipCardToBack(card: CardNew)
-        fun disableEqualCards(firstCard: CardNew,
-                              secondCard: CardNew)
-        fun isGameFinished(listOfCards: List<CardNew>)
-        fun goToPointCount()
         fun updateTurns()
-        fun backToMenuIntent(): Intent
-        fun pointCountIntent(): Intent
     }
 
     interface MainActivityView{

@@ -40,8 +40,6 @@ class GameActivity : AppCompatActivity(), MemoryGameInterface.GameActivityView {
         recyclerView.adapter = adapter
     }
 
-    override fun isListFull(listOfPlayedCards: MutableList<CardNew>): Boolean = gameActivityPresenter.isListFull(listOfPlayedCards)
-
     override fun showAlertCardRepeated() {
         AlertDialog.Builder(this).setMessage("No puedes usar la misma carta dos veces").show()
     }
@@ -62,4 +60,18 @@ class GameActivity : AppCompatActivity(), MemoryGameInterface.GameActivityView {
         val adapter = recyclerView.adapter as CardAdapter
         adapter.updateCards(listOfCards)
     }
+
+    override fun backToMenu() {
+        goToActivity(backToMenuIntent())
+    }
+
+    override fun goToPointCount() {
+        goToActivity(pointCountIntent())
+    }
+
+    private fun backToMenuIntent(): Intent = Intent(this, MainActivity::class.java)
+
+    private fun pointCountIntent(): Intent =
+        Intent(this, PointsCountActivity::class.java)
+            .putExtra("turns", getTurns())
 }

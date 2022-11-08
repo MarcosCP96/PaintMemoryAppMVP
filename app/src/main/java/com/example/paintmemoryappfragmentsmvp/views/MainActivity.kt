@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity(),MemoryGameInterface.MainActivityView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        startGame()
         val mainMenuPlayButton = findViewById<Button>(R.id.mainMenuPlayButton).setOnClickListener {
             startGame()
         }

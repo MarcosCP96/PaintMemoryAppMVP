@@ -31,7 +31,6 @@ class CardAdapter(private var onClick: (card: CardNew) -> Unit):
         } else {
             holder.firstCard.setImageResource(item.image)
         }
-//        item.imageView = holder.firstCard
         holder.firstCard.setOnClickListener {
             if (item.isEnabled){
                 onClick.invoke(item)
