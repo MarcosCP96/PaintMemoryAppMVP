@@ -1,6 +1,5 @@
 package com.example.paintmemoryappfragmentsmvp.presenters
 
-import android.content.Context
 import com.example.paintmemoryappfragmentsmvp.models.CardNew
 import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
 import com.example.paintmemoryappfragmentsmvp.useCase.*
