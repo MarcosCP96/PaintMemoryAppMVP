@@ -7,6 +7,7 @@ import com.example.paintmemoryappfragmentsmvp.views.MainActivity
 import com.example.paintmemoryappfragmentsmvp.views.PointsCountActivity
 
 class PointCountPresenter(private val pointsCountActivity: PointsCountActivity): MemoryGameInterface.PointCountPresenter {
+
     override fun backToMenuIntent(): Intent  = Intent(pointsCountActivity, MainActivity::class.java)
 
     override fun playAgainIntent(): Intent = Intent(pointsCountActivity, GameActivity::class.java)

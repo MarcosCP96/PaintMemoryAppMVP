@@ -33,18 +33,13 @@ class GameActivityPresenter(gameActivityInterface: MemoryGameInterface.GameActiv
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        if (isGameFinishedUseCase.isGameFinished(cards)) presenterGameActivityInterface.goToPointCount()
-    }
 
-    override fun updateTurns() {
-        presenterGameActivityInterface.updateTurns()
+        if (isGameFinishedUseCase.isGameFinished(cards)) presenterGameActivityInterface.goToPointCount()
     }
 
     override fun showAlertCardRepeated() {
         presenterGameActivityInterface.showAlertCardRepeated()
     }
 
-    private fun isListFull(listOfPlayedCards: MutableList<CardNew>): Boolean {
-        return listOfPlayedCards.size == 2
-    }
+    private fun isListFull(listOfPlayedCards: MutableList<CardNew>) = listOfPlayedCards.size == 2
 }

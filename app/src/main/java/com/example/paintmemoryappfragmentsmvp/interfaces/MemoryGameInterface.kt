@@ -5,23 +5,14 @@ import com.example.paintmemoryappfragmentsmvp.models.CardNew
 
 interface MemoryGameInterface {
 
-    interface PointCountPresenter{
-        fun backToMenuIntent(): Intent
-        fun playAgainIntent(): Intent
-    }
-
-    interface PointCountView{
-        fun backToMenu()
-        fun playAgain()
-        fun goToActivity(intent: Intent)
+    interface MainActivityPresenter{
+        fun startGame()
     }
 
     interface GameActivityView{
         fun showAlertCardRepeated()
         fun updateTurns()
         fun getTurns(): Int
-        fun goToActivity(intent: Intent)
-        fun backToMenu()
         fun goToPointCount()
         fun updateCardAdapter(listOfCards: List<CardNew>)
     }
@@ -31,15 +22,10 @@ interface MemoryGameInterface {
         fun getShuffledCards(): List<CardNew>
         fun flipCard(card: CardNew)
         fun showAlertCardRepeated()
-        fun updateTurns()
     }
 
-    interface MainActivityView{
-        fun startGame()
-        fun showHelp()
-    }
-
-    interface MainActivityPresenter{
-        fun startGame()
+    interface PointCountPresenter{
+        fun backToMenuIntent(): Intent
+        fun playAgainIntent(): Intent
     }
 }

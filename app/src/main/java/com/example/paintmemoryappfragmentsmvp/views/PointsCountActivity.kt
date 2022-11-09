@@ -10,7 +10,7 @@ import com.example.paintmemoryappfragmentsmvp.R
 import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
 import com.example.paintmemoryappfragmentsmvp.presenters.PointCountPresenter
 
-class PointsCountActivity : AppCompatActivity(), MemoryGameInterface.PointCountView {
+class PointsCountActivity : AppCompatActivity() {
     private val pointCountPresenter = PointCountPresenter(this)
 
     @SuppressLint("SetTextI18n")
@@ -29,15 +29,15 @@ class PointsCountActivity : AppCompatActivity(), MemoryGameInterface.PointCountV
         }
     }
 
-    override fun backToMenu() {
+    private fun backToMenu() {
         startActivity(pointCountPresenter.backToMenuIntent())
     }
 
-    override fun playAgain() {
+    private fun playAgain() {
         startActivity(pointCountPresenter.playAgainIntent())
     }
 
-    override fun goToActivity(intent: Intent) {
+    private fun goToActivity(intent: Intent) {
         startActivity(intent)
     }
 }
