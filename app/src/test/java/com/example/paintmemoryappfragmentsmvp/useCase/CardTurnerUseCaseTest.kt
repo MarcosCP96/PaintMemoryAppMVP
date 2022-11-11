@@ -10,8 +10,8 @@ internal class CardTurnerUseCaseTest {
     @Test
     fun `comparedcards es false`() {
         val cardTurnerUseCase = CardTurnerUseCase()
-        val list = listOf(CardNew(1,1, false, true))
-        val playedList = mutableListOf(CardNew(1,1, false, true))
+        val list = listOf(CardNew(1,1, true, true))
+        val playedList = mutableListOf(CardNew(1,1, true, true))
         cardTurnerUseCase.turnCard(list, playedList)
         assertFalse(list[0].isTurned)
     }
