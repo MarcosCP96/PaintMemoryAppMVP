@@ -10,12 +10,18 @@ import org.mockito.kotlin.verify
 internal class GameFinishedUseCaseTest {
 
     @Test
-    fun isGameFinished() {
-        val gameFinishedUseCase: GameFinishedUseCase = mock()
-        val gameFinishedUseCase2 = GameFinishedUseCase()
+    fun `game is finished`() {
+        val gameFinishedUseCase = GameFinishedUseCase()
         val list = listOf(CardNew(1,1, true, false), CardNew(1,2, true, false))
         gameFinishedUseCase.isGameFinished(list)
-        verify(gameFinishedUseCase).isGameFinished(list)
-        assertTrue(gameFinishedUseCase2.isGameFinished(list))
+        assertTrue(gameFinishedUseCase.isGameFinished(list))
+    }
+
+    @Test
+    fun `game is not finished`() {
+        val gameFinishedUseCase = GameFinishedUseCase()
+        val list = listOf(CardNew(1,1, false, true), CardNew(1,2, true, false))
+        gameFinishedUseCase.isGameFinished(list)
+        assertFalse(gameFinishedUseCase.isGameFinished(list))
     }
 }

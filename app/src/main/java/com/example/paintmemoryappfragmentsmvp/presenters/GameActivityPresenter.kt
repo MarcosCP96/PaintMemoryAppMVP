@@ -4,12 +4,14 @@ import com.example.paintmemoryappfragmentsmvp.models.CardNew
 import com.example.paintmemoryappfragmentsmvp.interfaces.MemoryGameInterface
 import com.example.paintmemoryappfragmentsmvp.useCase.*
 
-class GameActivityPresenter(gameActivityInterface: MemoryGameInterface.GameActivityView) : MemoryGameInterface.GameActivityPresenter {
-    private val presenterGameActivityInterface = gameActivityInterface
-    private val cardComparatorUseCase = CardComparatorUseCase()
-    private val shuffleCardUseCase = ShuffleCardsUseCase()
-    private val idTagEqualUseCase = IdTagEqualUseCase()
-    private val isGameFinishedUseCase = GameFinishedUseCase()
+class GameActivityPresenter(private val presenterGameActivityInterface: MemoryGameInterface.GameActivityView,
+                            private val shuffleCardUseCase: ShuffleCardsUseCase = ShuffleCardsUseCase(),
+                            private val idTagEqualUseCase: IdTagEqualUseCase = IdTagEqualUseCase(),
+                            private val isGameFinishedUseCase: GameFinishedUseCase = GameFinishedUseCase(),
+                            private val cardDisablerUseCase: CardDisablerUseCase = CardDisablerUseCase(),
+                            private val cardTurnerUseCase: CardTurnerUseCase = CardTurnerUseCase())
+    : MemoryGameInterface.GameActivityPresenter {
+
     private var cards: List<CardNew> = listOf()
     private var playedPairOfCards: MutableList<CardNew> = mutableListOf()
 
@@ -20,21 +22,26 @@ class GameActivityPresenter(gameActivityInterface: MemoryGameInterface.GameActiv
     override fun getShuffledCards(): List<CardNew> = cards
 
     override fun flipCard(card: CardNew) {
+        println("Primero: $cards")
         playedPairOfCards.add(card)
-        if (isListFull(playedPairOfCards)) presenterGameActivityInterface.updateTurns()
         cards.indexOf(card).apply { cards[this].isTurned = true }
+        println("Segundo: $cards")
         presenterGameActivityInterface.updateCardAdapter(cards)
-
-        try {
-            val comparedCards = idTagEqualUseCase.execute(playedPairOfCards)
-            cardComparatorUseCase.compareCards(comparedCards, cards, playedPairOfCards)
-            playedPairOfCards.clear()
-            presenterGameActivityInterface.updateCardAdapter(cards)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (isListFull(playedPairOfCards)) {
+            presenterGameActivityInterface.updateTurns()
+            try {
+                when(idTagEqualUseCase.execute(playedPairOfCards)){
+                    true -> cardDisablerUseCase.disableCard(cards, playedPairOfCards)
+                    false -> cardTurnerUseCase.turnCard(cards, playedPairOfCards)
+                }
+                playedPairOfCards.clear()
+                println("Tercero: $cards")
+                presenterGameActivityInterface.updateCardAdapter(cards)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            if (isGameFinishedUseCase.isGameFinished(cards)) presenterGameActivityInterface.goToPointCount()
         }
-
-        if (isGameFinishedUseCase.isGameFinished(cards)) presenterGameActivityInterface.goToPointCount()
     }
 
     override fun showAlertCardRepeated() {
