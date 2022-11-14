@@ -10,7 +10,7 @@ import org.mockito.kotlin.verify
 internal class GameFinishedUseCaseTest {
 
     @Test
-    fun `game is finished`() {
+    fun `todas las cartas en false`() {
         val gameFinishedUseCase = GameFinishedUseCase()
         val list = listOf(CardNew(1,1, true, false), CardNew(1,2, true, false))
         gameFinishedUseCase.isGameFinished(list)
@@ -18,9 +18,17 @@ internal class GameFinishedUseCaseTest {
     }
 
     @Test
-    fun `game is not finished`() {
+    fun `una carta en true`() {
         val gameFinishedUseCase = GameFinishedUseCase()
         val list = listOf(CardNew(1,1, false, true), CardNew(1,2, true, false))
+        gameFinishedUseCase.isGameFinished(list)
+        assertFalse(gameFinishedUseCase.isGameFinished(list))
+    }
+
+    @Test
+    fun `todas las cartas en true`() {
+        val gameFinishedUseCase = GameFinishedUseCase()
+        val list = listOf(CardNew(1,1, false, true), CardNew(1,2, true, true))
         gameFinishedUseCase.isGameFinished(list)
         assertFalse(gameFinishedUseCase.isGameFinished(list))
     }

@@ -36,7 +36,7 @@ internal class IdTagEqualUseCaseTest {
     fun execute4() {
         val idTagEqualUseCase = IdTagEqualUseCase()
         val list = mutableListOf(CardNew(1,1))
-        val expected = assertThrows(Exception::class.java, {idTagEqualUseCase.execute(list)})
+        val expected = assertThrows(Exception::class.java) { idTagEqualUseCase.execute(list) }
         assertEquals("Solo puedes usar dos cartas",expected.message)
     }
 }
